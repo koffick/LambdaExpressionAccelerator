@@ -12,19 +12,18 @@ namespace SpeedTest
         {
             IEnumerable<LambdaExpression> preLaunch;
             var modifiedExpression = new ModificatorLambdaExpression().Optimization(expression, funcF, out preLaunch);
-            var addParams = new List<object>();
-            foreach (var item in preLaunch)
-            {
-                addParams.Add(item.Compile().DynamicInvoke(numbers));
-            }
-            var newParams = numbers.Concat(addParams.ToArray());
-            return modifiedExpression.Compile().DynamicInvoke(newParams);
+            return Run(preLaunch, modifiedExpression, numbers);
         }
 
         public static object RunOptimally<T>(Expression<T> expression, params object[] numbers)
         {
             IEnumerable<LambdaExpression> preLaunch;
             var modifiedExpression = new UniversalModificatorLambdaExpression().Optimization(expression, out preLaunch);
+            return Run(preLaunch, modifiedExpression, numbers);
+        }
+
+        private static object Run(IEnumerable<LambdaExpression> preLaunch, LambdaExpression modifiedExpression, object[] numbers)
+        {
             var addParams = new List<object>();
             foreach (var item in preLaunch)
             {
