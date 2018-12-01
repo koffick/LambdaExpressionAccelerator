@@ -21,6 +21,19 @@ namespace SpeedTest
             return modifiedExpression.Compile().DynamicInvoke(newParams);
         }
 
+        public static object RunOptimally<T>(Expression<T> expression, params object[] numbers)
+        {
+            IEnumerable<LambdaExpression> preLaunch;
+            var modifiedExpression = new UniversalModificatorLambdaExpression().Optimization(expression, out preLaunch);
+            var addParams = new List<object>();
+            foreach (var item in preLaunch)
+            {
+                addParams.Add(item.Compile().DynamicInvoke(numbers));
+            }
+            var newParams = numbers.Concat(addParams.ToArray());
+            return modifiedExpression.Compile().DynamicInvoke(newParams);
+        }
+
         private static object[] Concat(this object[] left, object[] right)
         {
             var oldLength = left.Length;
