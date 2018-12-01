@@ -21,7 +21,7 @@ namespace LambdaExpressionAccelerator
             //Модификация body исходного выражения
             var exp = (Expression<T>)Visit(expression);
 
-            //Создание списка уникальных вызовов функции F с различными комбинациями параметров
+            //Создание списка уникальных вызовов функции с различными комбинациями параметров
             preLaunch = MakePreLaunch(exp.Parameters.ToList());
 
             //Переопределение параметров оптимизированного выражения
